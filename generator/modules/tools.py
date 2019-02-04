@@ -2,14 +2,13 @@
 from .__module__ import Module, source
 
 
-@source('apt')
+@source("apt")
 class Tools(Module):
-
     def __repr__(self):
-        return ''
+        return ""
 
     def build(self):
-        return r'''
+        return r"""
             DEBIAN_FRONTEND=noninteractive $APT_INSTALL \
                 build-essential \
                 ca-certificates \
@@ -18,4 +17,4 @@ class Tools(Module):
                 git \
                 vim \
                 && \
-            '''
+            """

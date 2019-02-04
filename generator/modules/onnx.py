@@ -4,11 +4,10 @@ from .python import Python
 
 
 @dependency(Python)
-@source('pip')
+@source("pip")
 class Onnx(Module):
-
     def build(self):
-        return r'''
+        return r"""
             DEBIAN_FRONTEND=noninteractive $APT_INSTALL \
                 protobuf-compiler \
                 libprotoc-dev \
@@ -17,4 +16,4 @@ class Onnx(Module):
             $PIP_INSTALL \
                 onnx \
                 && \
-        '''
+        """

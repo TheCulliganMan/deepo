@@ -1,16 +1,15 @@
 # -*- coding: utf-8 -*-
 from .__module__ import Module, dependency, source
-from .python import Python
 from .jupyter import Jupyter
+from .python import Python
 
 
 @dependency(Python, Jupyter)
-@source('pip')
+@source("pip")
 class Jupyterlab(Module):
-
     def build(self):
-        return r'''
+        return r"""
             $PIP_INSTALL \
                 jupyterlab \
                 && \
-        '''
+        """

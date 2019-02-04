@@ -5,13 +5,12 @@ from .tensorflow import Tensorflow
 
 
 @dependency(Python, Tensorflow)
-@source('pip')
+@source("pip")
 class Keras(Module):
-
     def build(self):
-        return r'''
+        return r"""
             $PIP_INSTALL \
                 h5py \
                 keras \
                 && \
-        '''
+        """

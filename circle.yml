@@ -105,6 +105,16 @@ jobs:
             - run: docker push $DOCKER_REPO:lasagne-py36-cpu            
             - run: docker push $DOCKER_REPO:lasagne-cpu
     
+    "gdal_shapely-py36-cu90_gdal_shapely-py36_gdal_shapely":
+        machine: true
+        steps:
+            - checkout
+            - run: docker build -t $DOCKER_REPO:gdal_shapely-py36-cu90 -t $DOCKER_REPO:gdal_shapely-py36 -t $DOCKER_REPO:gdal_shapely -f docker/Dockerfile.gdal_shapely-py36-cu90 .
+            - run: docker login -u $DOCKER_USER -p $DOCKER_PASS            
+            - run: docker push $DOCKER_REPO:gdal_shapely-py36-cu90            
+            - run: docker push $DOCKER_REPO:gdal_shapely-py36            
+            - run: docker push $DOCKER_REPO:gdal_shapely
+    
     "chainer-py36-cu90_chainer-py36_chainer":
         machine: true
         steps:
@@ -114,6 +124,16 @@ jobs:
             - run: docker push $DOCKER_REPO:chainer-py36-cu90            
             - run: docker push $DOCKER_REPO:chainer-py36            
             - run: docker push $DOCKER_REPO:chainer
+    
+    "pymssql-py36-cu90_pymssql-py36_pymssql":
+        machine: true
+        steps:
+            - checkout
+            - run: docker build -t $DOCKER_REPO:pymssql-py36-cu90 -t $DOCKER_REPO:pymssql-py36 -t $DOCKER_REPO:pymssql -f docker/Dockerfile.pymssql-py36-cu90 .
+            - run: docker login -u $DOCKER_USER -p $DOCKER_PASS            
+            - run: docker push $DOCKER_REPO:pymssql-py36-cu90            
+            - run: docker push $DOCKER_REPO:pymssql-py36            
+            - run: docker push $DOCKER_REPO:pymssql
     
     "keras-py36-cpu_keras-cpu":
         machine: true
@@ -133,6 +153,15 @@ jobs:
             - run: docker push $DOCKER_REPO:theano-py36-cpu            
             - run: docker push $DOCKER_REPO:theano-cpu
     
+    "gdal_shapely-py36-cpu_gdal_shapely-cpu":
+        machine: true
+        steps:
+            - checkout
+            - run: docker build -t $DOCKER_REPO:gdal_shapely-py36-cpu -t $DOCKER_REPO:gdal_shapely-cpu -f docker/Dockerfile.gdal_shapely-py36-cpu .
+            - run: docker login -u $DOCKER_USER -p $DOCKER_PASS            
+            - run: docker push $DOCKER_REPO:gdal_shapely-py36-cpu            
+            - run: docker push $DOCKER_REPO:gdal_shapely-cpu
+    
     "sonnet-py36-cu90_sonnet-py36_sonnet":
         machine: true
         steps:
@@ -142,6 +171,15 @@ jobs:
             - run: docker push $DOCKER_REPO:sonnet-py36-cu90            
             - run: docker push $DOCKER_REPO:sonnet-py36            
             - run: docker push $DOCKER_REPO:sonnet
+    
+    "pymssql-py36-cpu_pymssql-cpu":
+        machine: true
+        steps:
+            - checkout
+            - run: docker build -t $DOCKER_REPO:pymssql-py36-cpu -t $DOCKER_REPO:pymssql-cpu -f docker/Dockerfile.pymssql-py36-cpu .
+            - run: docker login -u $DOCKER_USER -p $DOCKER_PASS            
+            - run: docker push $DOCKER_REPO:pymssql-py36-cpu            
+            - run: docker push $DOCKER_REPO:pymssql-cpu
     
     "mxnet-py36-cu90_mxnet-py36_mxnet":
         machine: true
@@ -282,10 +320,14 @@ workflows:
             - "caffe-py36-cu90_caffe-py36_caffe"
             - "darknet-cpu"
             - "lasagne-py36-cpu_lasagne-cpu"
+            - "gdal_shapely-py36-cu90_gdal_shapely-py36_gdal_shapely"
             - "chainer-py36-cu90_chainer-py36_chainer"
+            - "pymssql-py36-cu90_pymssql-py36_pymssql"
             - "keras-py36-cpu_keras-cpu"
             - "theano-py36-cpu_theano-cpu"
+            - "gdal_shapely-py36-cpu_gdal_shapely-cpu"
             - "sonnet-py36-cu90_sonnet-py36_sonnet"
+            - "pymssql-py36-cpu_pymssql-cpu"
             - "mxnet-py36-cu90_mxnet-py36_mxnet"
             - "chainer-py36-cpu_chainer-cpu"
             - "all-jupyter-py36-cpu_all-jupyter-cpu"

@@ -5,12 +5,11 @@ from .tensorflow import Tensorflow
 
 
 @dependency(Python, Tensorflow)
-@source('pip')
+@source("pip")
 class Sonnet(Module):
-
     def build(self):
-        return r'''
+        return r"""
             $PIP_INSTALL \
                 dm-sonnet \
                 && \
-        '''
+        """

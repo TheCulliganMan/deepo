@@ -4,14 +4,14 @@ from .tools import Tools
 
 
 @dependency(Tools)
-@source('git')
+@source("git")
 class Torch(Module):
-
     def build(self):
-        return r'''
+        return (
+            r"""
             export TORCH_NVCC_FLAGS="-D__CUDA_NO_HALF_OPERATORS__" && \
-            $GIT_CLONE https://github.com/torch/distro.git ~/torch''' \
-        + r''' --recursive && \
+            $GIT_CLONE https://github.com/torch/distro.git ~/torch"""
+            + r""" --recursive && \
 
             cd ~/torch/exe/luajit-rocks && \
             mkdir build && cd build && \
@@ -32,19 +32,25 @@ class Torch(Module):
             luarocks install rockspec/moses-1.6.1-1.rockspec && \
 
             cd ~/torch && \
-            sed -i 's/extra\/cudnn/extra\/cudnn ''' \
-        + r'''\&\& git checkout R7/' install.sh && \
+            sed -i 's/extra\/cudnn/extra\/cudnn """
+            + r"""\&\& git checkout R7/' install.sh && \
             sed -i 's/$PREFIX\/bin\/luarocks/luarocks/' install.sh && \
             sed -i '/qt/d' install.sh && \
             sed -i '/Installing Lua/,/^cd \.\.$/d' install.sh && \
             sed -i '/path_to_nvidiasmi/,/^fi$/d' install.sh && \
             sed -i '/Restore anaconda/,/^Not updating$/d' install.sh && \
             sed -i '/You might want to/,/^fi$/d' install.sh && \
-            '''.rstrip() + (r'''
+            """.rstrip()
+            + (
+                r"""
             sed -i 's/\[ -x "$path_to_nvcc" \]/false/' install.sh && \
-            '''.rstrip() if self.composer.cuda_ver is None else ''
-        ) + r'''
+            """.rstrip()
+                if self.composer.cuda_ver is None
+                else ""
+            )
+            + r"""
             yes no | ./install.sh && \
             luarocks install image && \
             luarocks install nn && \
-        '''
+        """
+        )

@@ -4,18 +4,22 @@ from .python import Python
 
 
 @dependency(Python)
-@source('pip')
+@source("pip")
 class Chainer(Module):
-
     def build(self):
-        return r'''
+        return (
+            r"""
             $PIP_INSTALL \
-            '''.rstrip() + (
-                '' if self.composer.cuda_ver is None else \
-                r'''
+            """.rstrip()
+            + (
+                ""
+                if self.composer.cuda_ver is None
+                else r"""
                 cupy \
-                '''.rstrip()
-            ) + r'''
+                """.rstrip()
+            )
+            + r"""
                 chainer \
                 && \
-        '''
+        """
+        )

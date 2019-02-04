@@ -4,13 +4,12 @@ from .tools import Tools
 
 
 @dependency(Tools)
-@source('git')
+@source("git")
 class Darknet(Module):
-
     def build(self):
         use_gpu = 1 if self.composer.cuda_ver else 0
 
-        return r'''
+        return r"""
             $GIT_CLONE https://github.com/pjreddie/darknet.git ~/darknet && \
             cd ~/darknet && \
             sed -i 's/GPU=0/GPU=%d/g' ~/darknet/Makefile && \
@@ -20,4 +19,7 @@ class Darknet(Module):
             cp ~/darknet/*.a /usr/local/lib && \
             cp ~/darknet/*.so /usr/local/lib && \
             cp ~/darknet/darknet /usr/local/bin && \
-        ''' % (use_gpu, use_gpu)
+        """ % (
+            use_gpu,
+            use_gpu,
+        )

@@ -1,18 +1,17 @@
 # -*- coding: utf-8 -*-
 from .__module__ import Module, dependency, source
-from .tools import Tools
 from .python import Python
 from .theano import Theano
+from .tools import Tools
 
 
 @dependency(Tools, Python, Theano)
-@source('git')
+@source("git")
 class Lasagne(Module):
-
     def build(self):
-        return r'''
+        return r"""
             $GIT_CLONE https://github.com/Lasagne/Lasagne ~/lasagne && \
             cd ~/lasagne && \
             $PIP_INSTALL \
                 . && \
-        '''
+        """

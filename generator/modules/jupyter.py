@@ -4,17 +4,14 @@ from .python import Python
 
 
 @dependency(Python)
-@source('pip')
+@source("pip")
 class Jupyter(Module):
-
     def build(self):
-        return r'''
+        return r"""
             $PIP_INSTALL \
                 jupyter \
                 && \
-        '''
+        """
 
     def expose(self):
-        return [
-            8888,  # expose port for jupyter
-        ]
+        return [8888]  # expose port for jupyter

@@ -4,17 +4,18 @@ from .tools import Tools
 
 
 @dependency(Tools)
-@version('3.5')
-@source('apt')
+@version("3.5")
+@source("apt")
 class Python(Module):
-
     def __init__(self, manager, **args):
         super(self.__class__, self).__init__(manager, **args)
-        if self.version not in ('2.7', '3.5', '3.6',):
-            raise NotImplementedError('unsupported python version')
+        if self.version not in ("2.7", "3.5", "3.6"):
+            raise NotImplementedError("unsupported python version")
 
     def build(self):
-        return (r'''
+        return (
+            (
+                r"""
             DEBIAN_FRONTEND=noninteractive $APT_INSTALL \
                 python3-pip \
                 python3-dev \
@@ -24,8 +25,10 @@ class Python(Module):
             $PIP_INSTALL \
                 setuptools \
                 && \
-            ''' if self.version == '3.5' else (
-            r'''
+            """
+                if self.version == "3.5"
+                else (
+                    r"""
             DEBIAN_FRONTEND=noninteractive $APT_INSTALL \
                 software-properties-common \
                 && \
@@ -43,8 +46,9 @@ class Python(Module):
             $PIP_INSTALL \
                 setuptools \
                 && \
-            ''' if self.version == '3.6' else
-            r'''
+            """
+                    if self.version == "3.6"
+                    else r"""
             DEBIAN_FRONTEND=noninteractive $APT_INSTALL \
                 python-pip \
                 python-dev \
@@ -53,8 +57,10 @@ class Python(Module):
                 setuptools \
                 pip \
                 && \
-            '''
-        )).rstrip() + r'''
+            """
+                )
+            ).rstrip()
+            + r"""
             $PIP_INSTALL \
                 numpy \
                 scipy \
@@ -64,4 +70,5 @@ class Python(Module):
                 matplotlib \
                 Cython \
                 && \
-        '''
+        """
+        )

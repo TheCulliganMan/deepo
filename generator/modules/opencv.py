@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
 from .__module__ import Module, dependency, source, version
-from .tools import Tools
 from .boost import Boost
 from .python import Python
+from .tools import Tools
 
 
 @dependency(Tools, Python, Boost)
-@source('git')
-@version('4.0.1')
+@source("git")
+@version("4.0.1")
 class Opencv(Module):
-
     def build(self):
-        return r'''
+        return (
+            r"""
             DEBIAN_FRONTEND=noninteractive $APT_INSTALL \
                 libatlas-base-dev \
                 libgflags-dev \
@@ -36,4 +36,6 @@ class Opencv(Module):
                   .. && \
             make -j"$(nproc)" install && \
             ln -s /usr/local/include/opencv4/opencv2 /usr/local/include/opencv2 && \
-        ''' % self.version
+        """
+            % self.version
+        )

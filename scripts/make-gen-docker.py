@@ -4,29 +4,21 @@
 
 candidate_modules = [
     "tensorflow",
-    "sonnet",
-    "mxnet",
-    "cntk",
     "keras",
     "pytorch",
-    "chainer",
-    "theano",
-    "lasagne",
     "caffe",
     "torch",
-    "darknet",
-    "gdal_shapely",
-    "pymssql",
 ]
 
-non_python_modules = ["torch", "darknet"]
-
 pyvers = [
-    # '2.7',
-    # '3.5',
     "3.6"
 ]
 
+base_modules = [
+    "gdal_shapely",
+    "pymssql",
+    "pyhive"
+]
 
 def get_command(modules, postfix, cuda_ver, cudnn_ver):
     cuver = "cpu" if cuda_ver is None else "cu%d" % (float(cuda_ver) * 10)
@@ -43,24 +35,14 @@ def generate(f, cuda_ver=None, cudnn_ver=None):
 
     # single module
     for module in candidate_modules:
-        if module in non_python_modules:
-            modules = [module]
-            f.write(get_command(modules, module, cuda_ver, cudnn_ver))
-        else:
-            for pyver in pyvers:
-                modules = [module, "python==%s" % pyver]
-                postfix = "%s-py%s" % (module, pyver.replace(".", ""))
-                f.write(get_command(modules, postfix, cuda_ver, cudnn_ver))
-
-    # all modules
-    for pyver in pyvers:
-        modules = candidate_modules + ["python==%s" % pyver, "onnx"]
-        postfix = "all-py%s" % pyver.replace(".", "")
-        f.write(get_command(modules, postfix, cuda_ver, cudnn_ver))
+        for pyver in pyvers:
+            modules = [module, "python==%s" % pyver]
+            postfix = "%s-py%s" % (module, pyver.replace(".", ""))
+            f.write(get_command(modules, postfix, cuda_ver, cudnn_ver))
 
     # all modules with jupyter
     for pyver in pyvers:
-        modules = candidate_modules + ["python==%s" % pyver, "onnx", "jupyter"]
+        modules = candidate_modules + ["python==%s" % pyver] + base_modules
         postfix = "all-jupyter-py%s" % pyver.replace(".", "")
         f.write(get_command(modules, postfix, cuda_ver, cudnn_ver))
 

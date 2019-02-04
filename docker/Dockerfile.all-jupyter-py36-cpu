@@ -1,24 +1,16 @@
         # ==================================================================
         # module list
         # ------------------------------------------------------------------
-        # darknet       latest (git)
         # python        3.6    (apt)
         # torch         latest (git)
-        # chainer       latest (pip)
         # gdal_shapely  latest (pip)
-        # jupyter       latest (pip)
-        # mxnet         latest (pip)
-        # onnx          latest (pip)
+        # pyhive        latest (git)
         # pymssql       latest (git)
         # pytorch       latest (pip)
         # tensorflow    latest (pip)
-        # theano        latest (git)
         # keras         latest (pip)
-        # lasagne       latest (git)
         # opencv        4.0.1  (git)
-        # sonnet        latest (pip)
         # caffe         latest (git)
-        # cntk          latest (pip)
         # ==================================================================
 
         FROM ubuntu:16.04
@@ -44,20 +36,6 @@
                 git \
                 vim \
                 && \
-
-        # ==================================================================
-        # darknet
-        # ------------------------------------------------------------------
-
-            $GIT_CLONE https://github.com/pjreddie/darknet.git ~/darknet && \
-            cd ~/darknet && \
-            sed -i 's/GPU=0/GPU=0/g' ~/darknet/Makefile && \
-            sed -i 's/CUDNN=0/CUDNN=0/g' ~/darknet/Makefile && \
-            make -j"$(nproc)" && \
-            cp ~/darknet/include/* /usr/local/include && \
-            cp ~/darknet/*.a /usr/local/lib && \
-            cp ~/darknet/*.so /usr/local/lib && \
-            cp ~/darknet/darknet /usr/local/bin && \
 
         # ==================================================================
         # python
@@ -139,14 +117,6 @@
             ./b2 install --prefix=/usr/local && \
 
         # ==================================================================
-        # chainer
-        # ------------------------------------------------------------------
-
-            $PIP_INSTALL \
-                chainer \
-                && \
-
-        # ==================================================================
         # gdal_shapely
         # ------------------------------------------------------------------
 
@@ -162,39 +132,19 @@
             && \
 
         # ==================================================================
-        # jupyter
+        # pyhive
         # ------------------------------------------------------------------
 
-            $PIP_INSTALL \
-                jupyter \
-                && \
-
-        # ==================================================================
-        # mxnet
-        # ------------------------------------------------------------------
-
-            DEBIAN_FRONTEND=noninteractive $APT_INSTALL \
-                libatlas-base-dev \
-                graphviz \
-                && \
-
-            $PIP_INSTALL \
-                mxnet \
-                graphviz \
-                && \
-
-        # ==================================================================
-        # onnx
-        # ------------------------------------------------------------------
-
-            DEBIAN_FRONTEND=noninteractive $APT_INSTALL \
-                protobuf-compiler \
-                libprotoc-dev \
-                && \
-
-            $PIP_INSTALL \
-                onnx \
-                && \
+            apt-get update && apt-get install -y \
+                curl apt-transport-https debconf-utils libsasl2-dev gcc sasl2-bin libsasl2-2 libsasl2-dev libsasl2-modules \
+            && \
+            curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
+            && \
+            curl https://packages.microsoft.com/config/debian/8/prod.list > /etc/apt/sources.list.d/mssql-release.list \
+            && \
+            DEBIAN_FRONTEND=noninteractive ACCEPT_EULA=Y $APT_INSTALL msodbcsql17 \
+            && \
+            echo "{0}" > /etc/odbcinst.ini
 
         # ==================================================================
         # pymssql
@@ -248,18 +198,6 @@ FileUsage=1
                 && \
 
         # ==================================================================
-        # theano
-        # ------------------------------------------------------------------
-
-            DEBIAN_FRONTEND=noninteractive $APT_INSTALL \
-                libblas-dev \
-                && \
-
-            $PIP_INSTALL \
-                https://github.com/Theano/Theano/archive/master.zip \
-                && \
-
-        # ==================================================================
         # keras
         # ------------------------------------------------------------------
 
@@ -267,15 +205,6 @@ FileUsage=1
                 h5py \
                 keras \
                 && \
-
-        # ==================================================================
-        # lasagne
-        # ------------------------------------------------------------------
-
-            $GIT_CLONE https://github.com/Lasagne/Lasagne ~/lasagne && \
-            cd ~/lasagne && \
-            $PIP_INSTALL \
-                . && \
 
         # ==================================================================
         # opencv
@@ -305,14 +234,6 @@ FileUsage=1
                   .. && \
             make -j"$(nproc)" install && \
             ln -s /usr/local/include/opencv4/opencv2 /usr/local/include/opencv2 && \
-
-        # ==================================================================
-        # sonnet
-        # ------------------------------------------------------------------
-
-            $PIP_INSTALL \
-                dm-sonnet \
-                && \
 
         # ==================================================================
         # caffe
@@ -349,32 +270,6 @@ FileUsage=1
             cp -r python/caffe /usr/local/lib/python3.6/dist-packages/ && \
 
         # ==================================================================
-        # cntk
-        # ------------------------------------------------------------------
-
-            DEBIAN_FRONTEND=noninteractive $APT_INSTALL \
-                openmpi-bin \
-                libpng-dev \
-                libtiff-dev \
-                libjasper-dev \
-                && \
-
-            wget --no-verbose -O - https://github.com/01org/mkl-dnn/releases/download/v0.14/mklml_lnx_2018.0.3.20180406.tgz | tar -xzf - && \
-            cp mklml*/* /usr/local -r && \
-
-            wget --no-verbose -O - https://github.com/01org/mkl-dnn/archive/v0.14.tar.gz | tar -xzf - && \
-            cd mkl-dnn-0.14 && mkdir build && cd build && \
-            ln -s /usr/local external && \
-            cmake -D CMAKE_BUILD_TYPE=RELEASE \
-                  -D CMAKE_INSTALL_PREFIX=/usr/local \
-                  .. && \
-            make -j"$(nproc)" install && \
-
-            $PIP_INSTALL \
-                cntk \
-                && \
-
-        # ==================================================================
         # config & cleanup
         # ------------------------------------------------------------------
 
@@ -383,4 +278,4 @@ FileUsage=1
             apt-get autoremove && \
             rm -rf /var/lib/apt/lists/* /tmp/* ~/*
 
-        EXPOSE 8888 6006
+        EXPOSE 6006

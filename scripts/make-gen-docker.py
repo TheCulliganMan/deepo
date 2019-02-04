@@ -6,7 +6,6 @@ candidate_modules = [
     "tensorflow",
     "keras",
     "pytorch",
-    "caffe",
     "torch",
 ]
 
